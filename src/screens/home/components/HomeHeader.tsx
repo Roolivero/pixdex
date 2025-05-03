@@ -9,14 +9,13 @@ export function HomeHeader() {
     const paddingTop = Platform.OS === "ios" ? top + 20 : 20;
 
     return (
-        <View style={[styles.container, { paddingTop: paddingTop }]}>
+        <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-            <TouchableOpacity style={styles.button}>
-                <TextPressStart2P>Filtrar</TextPressStart2P>
+            <TouchableOpacity style={styles.button} activeOpacity={0.5}>
+                <TextPressStart2P style={styles.textButton}>FILTRAR</TextPressStart2P>
 
             </TouchableOpacity>
         </View>
-        
     );
 }
 
@@ -24,10 +23,12 @@ export function HomeHeader() {
 // Styles
 const styles = StyleSheet.create({
     container: {
-        height: 50,
+        height: 95,
         backgroundColor: Colors.fondo,
         padding: 20,
-        gap: 10,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start"
     },
     title: {
         fontSize: 24,
@@ -36,6 +37,15 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: Colors.purpura,
-        padding: 10,
+        padding: 5,
+        borderWidth: 1,
+        borderTopColor: Colors.purpuraClaro,
+        borderLeftColor: Colors.purpuraClaro,
+        borderBottomColor: Colors.purpuraOscuro,
+        borderRightColor: Colors.purpuraOscuro,
+    },
+    textButton: {
+        color: "#fff",
+        padding: 5,
     }
 });
