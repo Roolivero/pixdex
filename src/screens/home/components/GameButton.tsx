@@ -1,21 +1,28 @@
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { Href } from "expo-router";
+import { Href, useRouter } from "expo-router";
 
 interface GameButtonProps{
     titulo: string,
     descripcion: string,
     fondo: string,
-    // url: Href
+    url: Href
 }
 
-export function GameButton({titulo, descripcion,fondo}: GameButtonProps){
+export function GameButton({titulo, descripcion, fondo, url}: GameButtonProps){
+    const router = useRouter();
+    const handlePress = () => {
+        router.push(url)
+    }
+    
     return (
-        <TouchableOpacity style={[styles.button,{backgroundColor:fondo}]} >
+        <TouchableOpacity style={[styles.button,{backgroundColor:fondo}]} onPress={handlePress} >
             <TextPressStart2P style={styles.title}>{titulo}</TextPressStart2P>
             <Text style={styles.descripcion}>{descripcion}</Text>
-            <TextPressStart2P style={styles.jugar}>Jugar</TextPressStart2P>
+            <View style={styles.contenedorJugar}>
+                <TextPressStart2P style={styles.jugar}>Jugar</TextPressStart2P>
+            </View>
         </TouchableOpacity>
     )
 }
@@ -43,6 +50,10 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: "#fff", 
         fontWeight: 'bold',
+    },
+    contenedorJugar: {
+        width: "100%",
+        alignItems: "flex-end",
     }
     
 });

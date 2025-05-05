@@ -1,17 +1,24 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { HomeHeader } from "./components/HomeHeader";
 import { GameButton } from "./components/GameButton";
+import { AudioVisualScroll } from "./components/AudioVisualScroll";
+import { ROUTES } from "@/src/navigate/routes";
 
 export function HomeScreen() {
     return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
             <HomeHeader />
             <View style={styles.buttonContainer}>
-                <GameButton titulo="Desafío del Ahorcado" descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" fondo={Colors.purpura}/>
-                <GameButton titulo="Pixel Reveal" descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" fondo={Colors.verde}/>
+                <GameButton titulo="Desafío del Ahorcado" descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" fondo={Colors.purpura} url={ROUTES.AHORCADO}/>
+                <GameButton titulo="Pixel Reveal" descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" fondo={Colors.verde} url={ROUTES.PIXEL_REVEAL}/>
             </View>
-        </View>
+            <View style={styles.contenedorScroll}>
+                <AudioVisualScroll tipoId={1}/>
+                <AudioVisualScroll tipoId={2}/>
+                <AudioVisualScroll tipoId={3}/>
+            </View>
+        </ScrollView>
     );
 }
 
@@ -23,6 +30,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 10,
+        gap: 20
+    },
+    contenedorScroll: {
+        flexDirection: "column",
         justifyContent: "space-between",
         padding: 10,
         gap: 20
