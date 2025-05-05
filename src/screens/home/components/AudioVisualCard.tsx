@@ -42,9 +42,9 @@ export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
           </TextPressStart2P>
         </View>
         {generos.length > 0 && (
-          <View style={styles.generosContenrdor}>
+          <View style={styles.generosContenedor}>
             {generos.map((g, i) => (
-              <View key={1} style={styles.genero}>
+              <View key={i} style={styles.genero}>
                 <Text key={i} style={styles.generoText}>
                   {mayusculas(g?.nombre ?? "—")}
                 </Text>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
-  generosContenrdor: {
+  generoContenedor: {
     flexDirection: "row",
     paddingHorizontal:10,
     paddingBottom:8,
