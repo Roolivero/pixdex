@@ -1,28 +1,27 @@
-import { StyleSheet, View, Image, Dimensions, Text, TouchableOpacity } from "react-native";
 import { Colors } from "@/constants/Colors";
+import Imagen from "@/src/components/Imagen";
+import ListaGeneros from "@/src/components/ListaGeneros";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import {
   ContenidoAudiovisual,
 } from "@/src/data/contenidosAudiovisuales";
-import React from "react";
-import { generosContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
+import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
+import { Mayuscula } from "@/src/tools/mayuscula";
 import { useRouter } from "expo-router";
-import { ROUTES } from "@/src/navigate/routes"
+import React from "react";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface AudioVisualCardProps {
   itemCard: ContenidoAudiovisual;
 }
 
-function mayusculas(texto: string): string {
-  return texto.length === 0
-    ? ""
-    : texto[0].toUpperCase() + texto.slice(1).toLowerCase();
-}
-
 export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
   const router = useRouter();
   const handlePress = () => {
-    router.push(`${ROUTES.DETAIL}${itemCard.id}`)
+    router.push({
+      pathname: "/detail/[audioVisualId]",
+      params: { audioVisualId: itemCard.id.toString() }
+    });
   }
 
   const generos = itemCard.generos.map((id) =>
@@ -31,27 +30,13 @@ export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
       <View style={styles.contenedor}>
-        <Image
-          style={styles.stylesImage}
-          source={{ uri: itemCard.imageUrl }}
-          resizeMode="cover"
-        />
+        {itemCard && <Imagen url={itemCard.imageUrl}/>}
         <View>
           <TextPressStart2P style={styles.tituloCard}>
             {itemCard.nombre}
           </TextPressStart2P>
         </View>
-        {generos.length > 0 && (
-          <View style={styles.generosContenedor}>
-            {generos.map((g, i) => (
-              <View key={i} style={styles.genero}>
-                <Text key={i} style={styles.generoText}>
-                  {mayusculas(g?.nombre ?? "—")}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
+        <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []}/>
       </View>
       </TouchableOpacity>
   );
