@@ -1,7 +1,6 @@
 import { View, StyleSheet, Text, Dimensions } from "react-native";
 import { Image } from "expo-image"
 import { Colors } from "@/constants/Colors";
-import { ContenidoAudiovisual } from "../data/contenidosAudiovisuales";
 
 
 interface ImagenProps{

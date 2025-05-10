@@ -13,17 +13,20 @@ export function HomeHeader() {
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
             <TouchableOpacity style={styles.button} activeOpacity={0.5}>
                 <TextPressStart2P style={styles.textButton}>FILTRAR</TextPressStart2P>
-
             </TouchableOpacity>
         </View>
     );
 }
 
+let espacioHeader = 90
+if (Platform.OS === "ios") {
+    espacioHeader = 130
+}
 
 // Styles
 const styles = StyleSheet.create({
     container: {
-        height: 95,
+        height: espacioHeader,
         backgroundColor: Colors.fondo,
         padding: 20,
         flexDirection: "row",

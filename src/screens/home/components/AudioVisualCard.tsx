@@ -9,7 +9,7 @@ import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/
 import { Mayuscula } from "@/src/tools/mayuscula";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions,  StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface AudioVisualCardProps {
   itemCard: ContenidoAudiovisual;
@@ -43,7 +43,6 @@ export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
 }
 
 const WIDTH = Dimensions.get("window").width * 0.2;
-const HEIGTH = WIDTH * 1.5;
 
 // Styles
 const styles = StyleSheet.create({
@@ -55,30 +54,10 @@ const styles = StyleSheet.create({
     borderLeftColor: Colors.purpuraClaro,
     width: WIDTH,
   },
-  stylesImage: {
-    width: "100%",
-    height: HEIGTH,
-    backgroundColor: Colors.grisOscuro,
-  },
   tituloCard: {
     padding: 10,
     color: "#fff",
     fontSize: 12,
     fontWeight: "bold",
-  },
-  generoContenedor: {
-    flexDirection: "row",
-    paddingHorizontal:10,
-    paddingBottom:8,
-    justifyContent:"flex-start",
-    alignItems: "flex-start",
-    gap:10
-  },
-  genero: {
-    backgroundColor: Colors.grisOscuro,
-    padding: 4
-  },
-  generoText: {
-    color: "#fff"
-  },
+  }
 });

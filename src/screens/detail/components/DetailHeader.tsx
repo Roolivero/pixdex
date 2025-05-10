@@ -1,26 +1,30 @@
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, Platform, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function DetailHeader(){
     const router = useRouter();
         const handlePress = () => {
-            router.push({
-                pathname: "/",
-            });
-        }
+            router.back();
+        };
+    const { top } = useSafeAreaInsets();
+    const paddingTop = Platform.OS === "ios" ? top + 5 : 2;
+    
     return(
-        <TouchableOpacity activeOpacity={0.5} style={styles.boton} onPress={handlePress}>
-            <TextPressStart2P style={styles.nombreBoton}> Back</TextPressStart2P>
-        </TouchableOpacity>
+        <View style={{ paddingTop }}>
+            <TouchableOpacity activeOpacity={0.5} style={styles.boton} onPress={handlePress}>
+                <TextPressStart2P style={styles.nombreBoton}> Back</TextPressStart2P>
+            </TouchableOpacity>
+        </View>
         )        
 }
+
 
 // Styles
 const styles = StyleSheet.create({
     contenedorHeader: {
-        paddingBottom: 20,
         alignItems: "flex-start",
     },
     nombreBoton: {
