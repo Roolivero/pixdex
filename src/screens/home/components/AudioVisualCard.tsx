@@ -6,16 +6,21 @@ import {
   ContenidoAudiovisual,
 } from "@/src/data/contenidosAudiovisuales";
 import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
-import { Mayuscula } from "@/src/tools/mayuscula";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Dimensions,  StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {Platform, StyleSheet, TouchableOpacity, useWindowDimensions, View, LayoutChangeEvent } from "react-native";
 
 interface AudioVisualCardProps {
   itemCard: ContenidoAudiovisual;
+  fixedHeight?:number;
+  onMeasure?:(height:number)=>void;
 }
 
-export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
+export function AudioVisualCard({ itemCard, fixedHeight, onMeasure }: AudioVisualCardProps) {
+  const { width: screenWidth } = useWindowDimensions();
+  const widthFactor = Platform.OS === 'web' ? 0.2 : 0.5;
+  const CARD_WIDTH = screenWidth * widthFactor;
+
   const router = useRouter();
   const handlePress = () => {
     router.push({
@@ -29,20 +34,21 @@ export function AudioVisualCard({ itemCard }: AudioVisualCardProps) {
   );
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
-      <View style={styles.contenedor}>
-        {itemCard && <Imagen url={itemCard.imageUrl}/>}
+      <View style={[styles.contenedor,{ width: CARD_WIDTH },fixedHeight != null? {minHeight: fixedHeight}: undefined]} onLayout={(e:LayoutChangeEvent) => {
+        const{height} = e.nativeEvent.layout;
+        if(onMeasure) onMeasure(height);
+      }} >
+        {itemCard && <Imagen url={itemCard.imageUrl} />}
         <View>
           <TextPressStart2P style={styles.tituloCard}>
             {itemCard.nombre}
           </TextPressStart2P>
         </View>
-        <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []}/>
+        <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []} />
       </View>
-      </TouchableOpacity>
+    </TouchableOpacity>
   );
 }
-
-const WIDTH = Dimensions.get("window").width * 0.2;
 
 // Styles
 const styles = StyleSheet.create({
@@ -52,7 +58,6 @@ const styles = StyleSheet.create({
     borderRightColor: Colors.purpuraOscuro,
     borderBottomColor: Colors.purpuraClaro,
     borderLeftColor: Colors.purpuraClaro,
-    width: WIDTH,
   },
   tituloCard: {
     padding: 10,

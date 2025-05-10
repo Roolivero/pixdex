@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import { ContenidoAudiovisual, contenidosAudiovisuales } from "@/src/data/contenidosAudiovisuales";
-import React from "react";
+import React, { useState } from "react";
 import { AudioVisualCard } from "./AudioVisualCard";
 
 interface AudioVisualScrollProps{
@@ -20,6 +20,12 @@ export function AudioVisualScroll({tipoId}: AudioVisualScrollProps){
         (datoID) => datoID.tipoId === tipo?.id
     );
 
+    const [maxCardHeight, setMaxCardHeight] = useState(0);
+
+    const handleMeasure = (height: number) => {
+        if (height > maxCardHeight) setMaxCardHeight(height);
+    };
+
     return (
         <View style={styles.contenedor}>
             <View style={styles.contenedorTitulo}>
@@ -29,7 +35,8 @@ export function AudioVisualScroll({tipoId}: AudioVisualScrollProps){
                 data={datos}
                 horizontal
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <AudioVisualCard itemCard={item}/>}
+                renderItem={({item}) => <AudioVisualCard itemCard={item} onMeasure={handleMeasure}
+                        fixedHeight={maxCardHeight || undefined}/>}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.listaStyle}
             />

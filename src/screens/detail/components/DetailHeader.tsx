@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, Platform, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function DetailHeader(){
     const router = useRouter();
@@ -15,7 +16,7 @@ export default function DetailHeader(){
     return(
         <View style={{ paddingTop }}>
             <TouchableOpacity activeOpacity={0.5} style={styles.boton} onPress={handlePress}>
-                <TextPressStart2P style={styles.nombreBoton}> Back</TextPressStart2P>
+                <TextPressStart2P style={styles.nombreBoton}><MaterialIcons name='arrow-back'/> Back</TextPressStart2P>
             </TouchableOpacity>
         </View>
         )        

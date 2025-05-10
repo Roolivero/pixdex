@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
-import { ScrollView, StyleSheet, View } from "react-native";
-import DetailHeader from "./components/DetailHeader";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import DetailCard from "./components/DetailCard";
+import DetailHeader from "./components/DetailHeader";
 
 
 export interface DetailScreenProps {
@@ -16,7 +16,15 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
             <View style={styles.contenedorHeader}>
                 <DetailHeader/>
             </View>
-            <DetailCard audioVisualId={audioVisualId}/>
+            {
+                Platform.OS === "web" ? (
+                    <View style={{ alignSelf: "center" }}>
+                        <DetailCard audioVisualId={audioVisualId} />
+                    </View>
+                ) : (
+                    <DetailCard audioVisualId={audioVisualId} />
+                )
+            }
         </ScrollView>
     )
 }
@@ -31,7 +39,6 @@ const styles = StyleSheet.create({
         flex: 1,
         borderWidth: 5,
         padding: 10,
-        //alignItems: "center"
     },
     contenedorHeader: {
         paddingBottom: 20,

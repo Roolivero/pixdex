@@ -1,8 +1,8 @@
-import { EvilIcons, SimpleLineIcons } from "@expo/vector-icons";
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function HomeHeader() {
     const { top } = useSafeAreaInsets();
@@ -12,7 +12,7 @@ export function HomeHeader() {
         <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
             <TouchableOpacity style={styles.button} activeOpacity={0.5}>
-                <TextPressStart2P style={styles.textButton}>FILTRAR</TextPressStart2P>
+                <TextPressStart2P style={styles.textButton}><MaterialIcons name="settings" /> FILTRAR</TextPressStart2P>
             </TouchableOpacity>
         </View>
     );
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         borderRightColor: Colors.purpuraOscuro,
     },
     textButton: {
+        fontSize: 9,
         color: "#fff",
         padding: 5,
     }

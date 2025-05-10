@@ -24,11 +24,11 @@ export default function ListaGeneros({ generos }: ListaGenerosProps) {
 // Styles
 const styles = StyleSheet.create({
     generosContenedor: {
+        alignSelf: "flex-start",
         flexDirection: "row",
+        flexWrap: "wrap",
         paddingHorizontal: 10,
         paddingBottom: 8,
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
         gap: 10
     },
 });

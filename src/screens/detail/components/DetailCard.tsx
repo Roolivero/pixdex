@@ -1,13 +1,13 @@
-import { View, StyleSheet, Text, Dimensions, Platform } from "react-native";
 import { Colors } from "@/constants/Colors";
+import Etiqueta from "@/src/components/Etiqueta";
+import Imagen from "@/src/components/Imagen";
+import ListaGeneros from "@/src/components/ListaGeneros";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import { ContenidoAudiovisual, contenidosAudiovisuales } from "@/src/data/contenidosAudiovisuales";
-import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
+import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
+import { Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { DetailScreenProps } from "../DetailScreen";
-import Etiqueta from "@/src/components/Etiqueta";
-import ListaGeneros from "@/src/components/ListaGeneros";
-import Imagen from "@/src/components/Imagen";
 
 
 
@@ -28,9 +28,13 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
         generosContenidoAudiovisual.find((g) => g.id === id)
     );
 
+    const { width: screenWidth } = useWindowDimensions();
+    const widthFactor = Platform.OS === 'web' ? 0.4 : 0.9;
+    const CARD_WIDTH = screenWidth * widthFactor;
+
     return (
-        <View style={styles.contenedor}>
-            {dato && <Imagen url={dato.imageUrl}/>}
+        <View style={[styles.contenedor, { width: CARD_WIDTH }]}>
+            {dato && <Imagen url={dato.imageUrl} />}
             <TextPressStart2P style={styles.tituloCard}>
                 {dato?.nombre}
             </TextPressStart2P>
@@ -45,7 +49,7 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
                     Generos
                 </TextPressStart2P>
             </View>
-            <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []}/>
+            <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []} />
         </View>
     )
 }
@@ -59,7 +63,6 @@ const styles = StyleSheet.create({
         flex: 1,
         borderWidth: 5,
         padding: 10,
-        //alignItems: "center"
     },
     contenedorHeader: {
         paddingBottom: 20,
