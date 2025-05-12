@@ -34,7 +34,7 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
 
     return (
         <View style={[styles.contenedor, { width: CARD_WIDTH }]}>
-            {dato && <Imagen url={dato.imageUrl} />}
+            {dato && <Imagen url={dato.imageUrl} placeholder={dato.nombre} />}
             <TextPressStart2P style={styles.tituloCard}>
                 {dato?.nombre}
             </TextPressStart2P>

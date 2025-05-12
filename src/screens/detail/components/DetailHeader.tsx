@@ -12,7 +12,7 @@ export default function DetailHeader(){
         };
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 5 : 2;
-    
+
     return(
         <View style={{ paddingTop }}>
             <TouchableOpacity activeOpacity={0.5} style={styles.boton} onPress={handlePress}>

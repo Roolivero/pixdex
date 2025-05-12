@@ -1,13 +1,14 @@
-import { View, StyleSheet, Text, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { Image } from "expo-image"
 import { Colors } from "@/constants/Colors";
 
 
-interface ImagenProps{
+interface ImagenProps {
     url: string
+    placeholder: string
 }
 
-export default function Imagen({url}: ImagenProps) {
+export default function Imagen({ url, placeholder }: ImagenProps) {
     return (
         <Image
             style={styles.stylesImage}
@@ -15,6 +16,7 @@ export default function Imagen({url}: ImagenProps) {
             contentFit="cover"
             cachePolicy="disk"
             transition={300}
+            placeholder={placeholder}
         />
     )
 }
