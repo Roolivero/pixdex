@@ -1,27 +1,24 @@
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { TouchableOpacity, StyleSheet, Platform, View } from "react-native";
+import Boton from "@/src/components/Boton";
+import { StyleSheet, Platform, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
 
 export default function DetailHeader(){
     const router = useRouter();
-        const handlePress = () => {
-            router.back();
-        };
+    const handlePress = () => {
+        router.back();
+    };
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 5 : 2;
 
     return(
         <View style={{ paddingTop }}>
-            <TouchableOpacity activeOpacity={0.5} style={styles.boton} onPress={handlePress}>
-                <TextPressStart2P style={styles.nombreBoton}><MaterialIcons name='arrow-back'/> Back</TextPressStart2P>
-            </TouchableOpacity>
+            <Boton onPress={handlePress} icon="arrow-back" texto="Back" variant="large" />
         </View>
         )        
 }
-
 
 // Styles
 const styles = StyleSheet.create({

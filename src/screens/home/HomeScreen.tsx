@@ -4,6 +4,7 @@ import { HomeHeader } from "./components/HomeHeader";
 import { GameButton } from "./components/GameButton";
 import { AudioVisualScroll } from "./components/AudioVisualScroll";
 import { ROUTES } from "@/src/navigate/routes";
+import { tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 
 export function HomeScreen() {
     return (
@@ -14,9 +15,9 @@ export function HomeScreen() {
                 <GameButton titulo="Pixel Reveal" descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" fondo={Colors.verde} url={ROUTES.PIXEL_REVEAL}/>
             </View>
             <View style={styles.contenedorScroll}>
-                <AudioVisualScroll tipoId={1}/>
-                <AudioVisualScroll tipoId={2}/>
-                <AudioVisualScroll tipoId={3}/>
+                {tiposContenidoAudiovisual.map(tipo => (
+                    <AudioVisualScroll key={tipo.id} tipoId={tipo.id} />
+                ))}
             </View>
         </ScrollView>
     );

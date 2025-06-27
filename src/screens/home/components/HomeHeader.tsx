@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import Boton from "@/src/components/Boton";
+import { Platform, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function HomeHeader() {
@@ -11,9 +11,7 @@ export function HomeHeader() {
     return (
         <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-            <TouchableOpacity style={styles.button} activeOpacity={0.5}>
-                <TextPressStart2P style={styles.textButton}><MaterialIcons name="settings" /> FILTRAR</TextPressStart2P>
-            </TouchableOpacity>
+            <Boton onPress={() => {}} icon="settings" texto="FILTRAR" variant="small" />
         </View>
     );
 }
