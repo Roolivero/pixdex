@@ -1,22 +1,23 @@
 import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, Text} from "react-native";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { ContenidoAudiovisual, contenidosAudiovisuales } from "@/src/data/contenidosAudiovisuales";
+import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
 import React, { useState } from "react";
 import { AudioVisualCard } from "./AudioVisualCard";
 
 interface AudioVisualScrollProps{
     tipoId: number,
+    contenidosFiltrados: IContenidoAudiovisual[];
     // url: Href
 }
 
-export function AudioVisualScroll({tipoId}: AudioVisualScrollProps){
+export function AudioVisualScroll({tipoId, contenidosFiltrados}: AudioVisualScrollProps){
     const tipo: ITipoContenidoAudiovisual | undefined = tiposContenidoAudiovisual.find(
         (tID) => tID.id === tipoId
     );
     
-    const datos: ContenidoAudiovisual[] = contenidosAudiovisuales.filter(
+    const datos: IContenidoAudiovisual[] = contenidosFiltrados.filter(
         (datoID) => datoID.tipoId === tipo?.id
     );
 
@@ -31,15 +32,21 @@ export function AudioVisualScroll({tipoId}: AudioVisualScrollProps){
             <View style={styles.contenedorTitulo}>
                 <TextPressStart2P style={styles.titulo}>{tipo?.plural.toUpperCase()}</TextPressStart2P>
             </View>
-            <FlatList 
-                data={datos}
-                horizontal
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <AudioVisualCard itemCard={item} onMeasure={handleMeasure}
-                        fixedHeight={maxCardHeight || undefined}/>}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.listaStyle}
-            />
+            {datos.length === 0 ? (
+                <View style={styles.noResultsContainer}>
+                    <Text style={styles.noResultsText}>No hay resultados que coincidan con su búsqueda</Text>
+                </View>
+            ) : (
+                <FlatList 
+                    data={datos}
+                    horizontal
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) => <AudioVisualCard itemCard={item} onMeasure={handleMeasure}
+                            fixedHeight={maxCardHeight || undefined}/>} 
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.listaStyle}
+                />
+            )}
         </View>
     )
 }
@@ -71,5 +78,15 @@ const styles = StyleSheet.create({
     },
     listaStyle: {
         gap: 10
+    },
+    noResultsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    noResultsText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: Colors.grisOscuro
     }
 });

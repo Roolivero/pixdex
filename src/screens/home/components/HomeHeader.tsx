@@ -4,14 +4,18 @@ import Boton from "@/src/components/Boton";
 import { Platform, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export function HomeHeader() {
+interface HomeHeaderProps {
+    onOpenFilters: () => void;
+}
+
+export function HomeHeader({ onOpenFilters }: HomeHeaderProps) {
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 20 : 20;
 
     return (
         <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-            <Boton onPress={() => {}} icon="settings" texto="FILTRAR" variant="small" />
+            <Boton onPress={onOpenFilters} icon="settings" texto="FILTRAR" variant="small" />
         </View>
     );
 }
