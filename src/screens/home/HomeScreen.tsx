@@ -11,6 +11,7 @@ import { LoadingContainer } from "@/src/components/LoadingContainer";
 import { ErrorContainer } from "@/src/components/ErrorContainer";
 import { useFilters } from "@/src/hooks/useFilters";
 
+
 export function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false);
     
