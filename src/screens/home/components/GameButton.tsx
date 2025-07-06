@@ -38,7 +38,6 @@ if (Platform.OS === "ios") {
     descripcionSize = 10
 }
 
-// Styles
 const styles = StyleSheet.create({
     button: {
         borderColor: "#4A3D70",

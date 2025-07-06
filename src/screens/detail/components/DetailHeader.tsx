@@ -20,7 +20,6 @@ export default function DetailHeader(){
         )        
 }
 
-// Styles
 const styles = StyleSheet.create({
     contenedorHeader: {
         alignItems: "flex-start",

@@ -83,7 +83,6 @@ export function HomeScreen() {
     );
 }
 
-// Styles
 const styles = StyleSheet.create({
     buttonContainer:{
         flexDirection: "row",

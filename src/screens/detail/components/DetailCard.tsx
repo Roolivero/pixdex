@@ -41,7 +41,6 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
 }
 
 
-// Styles
 const styles = StyleSheet.create({
 
     contenedorPrincipal: {

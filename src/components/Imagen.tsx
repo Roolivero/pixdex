@@ -22,7 +22,6 @@ export default function Imagen({ url, placeholder }: ImagenProps) {
 }
 
 
-// Styles
 const styles = StyleSheet.create({
     stylesImage: {
         width: "100%",

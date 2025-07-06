@@ -15,7 +15,6 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
         const contenidosDisponibles = contenidos.filter(c => !contenidosUsados.includes(c.id));
         
         if (contenidosDisponibles.length === 0) {
-            // Si no hay más contenidos disponibles, resetear
             setContenidosUsados([]);
             const contenidoAleatorio = contenidos[Math.floor(Math.random() * contenidos.length)];
             setContenidoActual(contenidoAleatorio);
@@ -33,7 +32,7 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
         if (esCorrecto) {
             setScore(prev => prev + 1);
             setContenidosUsados(prev => [...prev, contenidoActual.id]);
-            setContenidoActual(null); // Esto activará seleccionarNuevoContenido
+            setContenidoActual(null);
         } else {
             setVidas(prev => prev - 1);
         }
@@ -56,7 +55,6 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
         setContenidoActual(null);
     };
 
-    // Efecto para seleccionar nuevo contenido cuando cambia la lista o el contenido actual
     useEffect(() => {
         if (contenidos.length > 0 && !contenidoActual) {
             seleccionarNuevoContenido();

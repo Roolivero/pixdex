@@ -15,7 +15,6 @@ export default function Etiqueta({texto}: EtiquetaProps) {
     )
 }
 
-// Styles
 const styles = StyleSheet.create({
     genero: {
         backgroundColor: Colors.grisOscuro,

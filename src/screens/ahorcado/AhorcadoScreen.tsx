@@ -25,14 +25,12 @@ export default function AhorcadoScreen() {
         router.push("/");
     };
 
-    // Efecto para manejar game over cuando se acaban las vidas
     useEffect(() => {
         if (isGameOver) {
             router.push("/game-over");
         }
     }, [isGameOver, router]);
 
-    // Si se acabaron las vidas, mostrar loading mientras navega
     if (isGameOver) {
         return <LoadingContainer />;
     }

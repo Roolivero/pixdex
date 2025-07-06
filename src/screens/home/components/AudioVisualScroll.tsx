@@ -56,7 +56,6 @@ export function AudioVisualScroll({tipoId, contenidosFiltrados}: AudioVisualScro
 }
 
 
-// Styles
 const styles = StyleSheet.create({
     contenedor: {
         borderWidth:4,

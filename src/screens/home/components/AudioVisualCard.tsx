@@ -64,7 +64,6 @@ export function AudioVisualCard({ itemCard, fixedHeight, onMeasure }: AudioVisua
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   contenedor: {
     borderWidth: 2,
@@ -80,10 +79,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   tituloContainer: {
-    // El título se mantiene en la parte superior
   },
   generosContainer: {
-    // Los géneros se posicionan al final
     marginTop: 'auto',
   },
   tituloCard: {

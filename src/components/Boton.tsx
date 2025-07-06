@@ -45,7 +45,6 @@ export default function Boton({
     )
 }
 
-// Styles
 const styles = StyleSheet.create({
     button: {
         backgroundColor: Colors.purpura,

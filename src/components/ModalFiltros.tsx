@@ -51,7 +51,6 @@ export function ModalFiltros({
         onClose();
     };
 
-    // Sincronizar filtros cuando cambien los valores actuales
     useEffect(() => {
         setTiposSeleccionados(tiposActuales);
         setGenerosSeleccionados(generosActuales);

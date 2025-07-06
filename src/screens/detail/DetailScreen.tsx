@@ -56,7 +56,6 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
 
 
 
-// Styles
 const styles = StyleSheet.create({
     contenedorHeader: {
         paddingBottom: 20,

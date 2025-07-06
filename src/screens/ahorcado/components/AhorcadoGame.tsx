@@ -15,7 +15,6 @@ interface AhorcadoGameProps {
 export default function AhorcadoGame({ contenido, onAdivinarTitulo, onAdivinarLetra }: AhorcadoGameProps) {
     const [letrasAdivinadas, setLetrasAdivinadas] = useState<string[]>([]);
 
-    // Función para verificar si el título está completamente adivinado
     const verificarTituloCompleto = () => {
         const letrasTitulo = contenido.nombre.split('').filter(letra => /[A-Za-z]/.test(letra));
         const todasAdivinadas = letrasTitulo.every(letra => 
@@ -26,17 +25,13 @@ export default function AhorcadoGame({ contenido, onAdivinarTitulo, onAdivinarLe
         return todasAdivinadas;
     };
 
-    // Efecto para verificar si el título está completo después de cada letra adivinada
     useEffect(() => {
         if (letrasAdivinadas.length > 0 && verificarTituloCompleto()) {
-            // Si todas las letras han sido adivinadas, simular que se adivinó el título completo
             onAdivinarTitulo(contenido.nombre);
-            // Resetear las letras adivinadas para el siguiente contenido
             setLetrasAdivinadas([]);
         }
     }, [letrasAdivinadas, contenido.nombre, onAdivinarTitulo]);
 
-    // Efecto para resetear las letras adivinadas cuando cambia el contenido
     useEffect(() => {
         setLetrasAdivinadas([]);
     }, [contenido.id]);
@@ -51,23 +46,19 @@ export default function AhorcadoGame({ contenido, onAdivinarTitulo, onAdivinarLe
 
     return (
         <View style={[styles.contenedor, { width: CARD_WIDTH }]}>
-            {/* Botones de adivinación */}
             <AhorcadoButtons
                 onAdivinarTitulo={onAdivinarTitulo}
                 onAdivinarLetra={handleAdivinarLetra}
             />
 
-            {/* Imagen del contenido */}
             <View style={styles.imagenContainer}>
                 <Imagen url={contenido.imageUrl} placeholder={contenido.nombre} />
             </View>
 
-            {/* Texto de debug */}
             <Text style={styles.debugText}>
                 {contenido.nombre}
             </Text>
 
-            {/* Área de letras */}
             <AhorcadoWordDisplay
                 titulo={contenido.nombre}
                 letrasAdivinadas={letrasAdivinadas}

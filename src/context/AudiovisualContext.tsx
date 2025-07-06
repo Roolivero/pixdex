@@ -6,24 +6,21 @@ import { getContenidosConDemora, getTiposConDemora, getGenerosConDemora } from '
 import { isApiAvailable } from '@/constants/Config';
 
 interface AudiovisualContextType {
-  // Datos
   contenidos: IContenidoAudiovisual[];
   tipos: ITipoContenidoAudiovisual[];
   generos: IGeneroContenidoAudiovisual[];
   
-  // Estados de carga
   isLoading: boolean;
   error: string | null;
   isUsingLocalData: boolean;
   
-  // Funciones
   refreshData: () => Promise<void>;
   getContenidoById: (id: number) => IContenidoAudiovisual | undefined;
   getTipoById: (id: number) => ITipoContenidoAudiovisual | undefined;
   getGeneroById: (id: number) => IGeneroContenidoAudiovisual | undefined;
   getGenerosByIds: (ids: number[]) => IGeneroContenidoAudiovisual[];
   getContenidosByTipo: (tipoId: number) => IContenidoAudiovisual[];
-  getContenidosByGeneros: (generoIds: number[]) => IGeneroContenidoAudiovisual[];
+  getContenidosByGeneros: (generoIds: number[]) => IContenidoAudiovisual[];
   getContenidosFiltrados: (tipoIds: number[], generoIds: number[]) => IContenidoAudiovisual[];
 }
 
@@ -49,7 +46,6 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
     try {
       console.log("🔄 Verificando disponibilidad de la API...");
       
-      // Verificar si la API está disponible
       const apiAvailable = await isApiAvailable();
       
       if (!apiAvailable) {
@@ -104,12 +100,10 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
     }
   };
 
-  // Cargar datos al montar el componente
   useEffect(() => {
     loadData();
   }, []);
 
-  // Funciones de utilidad
   const getContenidoById = (id: number): IContenidoAudiovisual | undefined => {
     return contenidos.find(contenido => contenido.id === id);
   };
@@ -140,12 +134,10 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
   const getContenidosFiltrados = (tipoIds: number[], generoIds: number[]): IContenidoAudiovisual[] => {
     let filtrados = contenidos;
 
-    // Filtrar por tipos
     if (tipoIds.length > 0) {
       filtrados = filtrados.filter(contenido => tipoIds.includes(contenido.tipoId));
     }
 
-    // Filtrar por géneros - debe tener TODOS los géneros seleccionados
     if (generoIds.length > 0) {
       filtrados = filtrados.filter(contenido => 
         generoIds.every(generoId => contenido.generos.includes(generoId))
@@ -183,7 +175,6 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
   );
 }
 
-// Hook personalizado para usar el contexto
 export function useAudiovisual() {
   const context = useContext(AudiovisualContext);
   if (context === undefined) {

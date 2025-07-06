@@ -21,7 +21,6 @@ export default function ListaGeneros({ generos }: ListaGenerosProps) {
 
 
 
-// Styles
 const styles = StyleSheet.create({
     generosContenedor: {
         alignSelf: "flex-start",

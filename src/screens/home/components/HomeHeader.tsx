@@ -25,7 +25,6 @@ if (Platform.OS === "ios") {
     espacioHeader = 130
 }
 
-// Styles
 const styles = StyleSheet.create({
     container: {
         height: espacioHeader,

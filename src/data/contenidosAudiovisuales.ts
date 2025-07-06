@@ -348,7 +348,6 @@ export const contenidosAudiovisuales: IContenidoAudiovisual[] = [
     imageUrl: "https://place-hold.it/400x600",
   },
 
-  // ANIME
   {
     id: 41,
     nombre: "Naruto",

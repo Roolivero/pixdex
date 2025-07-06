@@ -6,12 +6,10 @@ export function useFilters() {
     const [generosSeleccionados, setGenerosSeleccionados] = useState<number[]>([]);
     const { getContenidosFiltrados, tipos } = useAudiovisual();
 
-    // Memoizar los contenidos filtrados para evitar recálculos innecesarios
     const contenidosFiltrados = useMemo(() => {
         return getContenidosFiltrados(tiposSeleccionados, generosSeleccionados);
     }, [getContenidosFiltrados, tiposSeleccionados, generosSeleccionados]);
 
-    // Memoizar los tipos para mostrar
     const tiposParaMostrar = useMemo(() => {
         return tiposSeleccionados.length > 0
             ? tipos.filter(t => tiposSeleccionados.includes(t.id))
