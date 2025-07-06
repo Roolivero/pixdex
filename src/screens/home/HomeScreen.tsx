@@ -25,6 +25,7 @@ export function HomeScreen() {
     const {
         contenidosFiltrados,
         tiposParaMostrar,
+        generosSeleccionados,
         handleApplyFilters,
         hasActiveFilters
     } = useFilters();
@@ -74,6 +75,8 @@ export function HomeScreen() {
                 onApplyFilters={handleApplyFilters}
                 tipos={tipos}
                 generos={generos}
+                tiposActuales={tiposParaMostrar.map(t => t.id)}
+                generosActuales={generosSeleccionados}
             />
         </ScrollView>
     );

@@ -125,10 +125,10 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
       filtrados = filtrados.filter(contenido => tipoIds.includes(contenido.tipoId));
     }
 
-    // Filtrar por géneros
+    // Filtrar por géneros - debe tener TODOS los géneros seleccionados
     if (generoIds.length > 0) {
       filtrados = filtrados.filter(contenido => 
-        contenido.generos.some(generoId => generoIds.includes(generoId))
+        generoIds.every(generoId => contenido.generos.includes(generoId))
       );
     }
 

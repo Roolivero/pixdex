@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { TextPressStart2P } from './TextPressStart2P';
@@ -14,11 +14,21 @@ interface ModalFiltrosProps {
     onApplyFilters: (tiposSeleccionados: number[], generosSeleccionados: number[]) => void;
     tipos: ITipoContenidoAudiovisual[];
     generos: IGeneroContenidoAudiovisual[];
+    tiposActuales: number[];
+    generosActuales: number[];
 }
 
-export function ModalFiltros({ visible, onClose, onApplyFilters, tipos, generos }: ModalFiltrosProps) {
-    const [tiposSeleccionados, setTiposSeleccionados] = useState<number[]>([]);
-    const [generosSeleccionados, setGenerosSeleccionados] = useState<number[]>([]);
+export function ModalFiltros({ 
+    visible, 
+    onClose, 
+    onApplyFilters, 
+    tipos, 
+    generos, 
+    tiposActuales, 
+    generosActuales 
+}: ModalFiltrosProps) {
+    const [tiposSeleccionados, setTiposSeleccionados] = useState<number[]>(tiposActuales);
+    const [generosSeleccionados, setGenerosSeleccionados] = useState<number[]>(generosActuales);
 
     const toggleTipo = (tipoId: number) => {
         setTiposSeleccionados(prev => 
@@ -40,6 +50,12 @@ export function ModalFiltros({ visible, onClose, onApplyFilters, tipos, generos 
         onApplyFilters(tiposSeleccionados, generosSeleccionados);
         onClose();
     };
+
+    // Sincronizar filtros cuando cambien los valores actuales
+    useEffect(() => {
+        setTiposSeleccionados(tiposActuales);
+        setGenerosSeleccionados(generosActuales);
+    }, [tiposActuales, generosActuales]);
 
     const resetFilters = () => {
         setTiposSeleccionados([]);
