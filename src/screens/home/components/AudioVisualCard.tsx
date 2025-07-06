@@ -35,17 +35,30 @@ export function AudioVisualCard({ itemCard, fixedHeight, onMeasure }: AudioVisua
   
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
-      <View style={[styles.contenedor,{ width: CARD_WIDTH },fixedHeight != null? {minHeight: fixedHeight}: undefined]} onLayout={(e:LayoutChangeEvent) => {
-        const{height} = e.nativeEvent.layout;
-        if(onMeasure) onMeasure(height);
-      }} >
+      <View 
+        style={[
+          styles.contenedor,
+          { width: CARD_WIDTH }, 
+          fixedHeight != null ? { height: fixedHeight } : undefined
+        ]} 
+        onLayout={(e: LayoutChangeEvent) => {
+          const { height } = e.nativeEvent.layout;
+          if (onMeasure && height > 0) {
+            onMeasure(height);
+          }
+        }}
+      >
         {itemCard && <Imagen url={itemCard.imageUrl} placeholder="https://place-hold.it/400x600" />}
-        <View>
-          <TextPressStart2P style={styles.tituloCard}>
-            {itemCard.nombre}
-          </TextPressStart2P>
+        <View style={styles.contenidoContainer}>
+          <View style={styles.tituloContainer}>
+            <TextPressStart2P style={styles.tituloCard}>
+              {itemCard.nombre}
+            </TextPressStart2P>
+          </View>
+          <View style={styles.generosContainer}>
+            <ListaGeneros generos={generos} />
+          </View>
         </View>
-        <ListaGeneros generos={generos} />
       </View>
     </TouchableOpacity>
   );
@@ -59,6 +72,19 @@ const styles = StyleSheet.create({
     borderRightColor: Colors.purpuraOscuro,
     borderBottomColor: Colors.purpuraClaro,
     borderLeftColor: Colors.purpuraClaro,
+    flexDirection: 'column',
+  },
+  contenidoContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  tituloContainer: {
+    // El título se mantiene en la parte superior
+  },
+  generosContainer: {
+    // Los géneros se posicionan al final
+    marginTop: 'auto',
   },
   tituloCard: {
     padding: 10,

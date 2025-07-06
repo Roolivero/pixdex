@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, View, Text} from "react-native";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { AudioVisualCard } from "./AudioVisualCard";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
 
@@ -21,9 +21,9 @@ export function AudioVisualScroll({tipoId, contenidosFiltrados}: AudioVisualScro
 
     const [maxCardHeight, setMaxCardHeight] = useState(0);
 
-    const handleMeasure = (height: number) => {
-        if (height > maxCardHeight) setMaxCardHeight(height);
-    };
+    const handleMeasure = useCallback((height: number) => {
+        setMaxCardHeight(prev => Math.max(prev, height));
+    }, []);
 
     return (
         <View style={styles.contenedor}>
@@ -36,11 +36,17 @@ export function AudioVisualScroll({tipoId, contenidosFiltrados}: AudioVisualScro
                 </View>
             ) : (
                 <FlatList 
+                    key={`flatlist-height-${maxCardHeight}`}
                     data={datos}
                     horizontal
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({item}) => <AudioVisualCard itemCard={item} onMeasure={handleMeasure}
-                            fixedHeight={maxCardHeight || undefined}/>} 
+                    keyExtractor={(item) => `${item.id}-height-${maxCardHeight}`}
+                    renderItem={({item}) => (
+                        <AudioVisualCard 
+                            itemCard={item} 
+                            onMeasure={handleMeasure}
+                            fixedHeight={maxCardHeight > 0 ? maxCardHeight : undefined}
+                        />
+                    )} 
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.listaStyle}
                 />
