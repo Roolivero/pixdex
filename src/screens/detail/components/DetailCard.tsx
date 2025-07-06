@@ -3,30 +3,16 @@ import Etiqueta from "@/src/components/Etiqueta";
 import Imagen from "@/src/components/Imagen";
 import ListaGeneros from "@/src/components/ListaGeneros";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { ContenidoAudiovisual, contenidosAudiovisuales } from "@/src/data/contenidosAudiovisuales";
-import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
-import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { DetailScreenProps } from "../DetailScreen";
-
-
+import { useAudiovisual } from "@/src/context/AudiovisualContext";
 
 export default function DetailCard({ audioVisualId }: DetailScreenProps) {
-    const tipoAudioVisualId: ContenidoAudiovisual | undefined = contenidosAudiovisuales.find(
-        (contenido) => contenido.id === Number(audioVisualId)
-    );
-
-    const tipo: ITipoContenidoAudiovisual | undefined = tiposContenidoAudiovisual.find(
-        (tID) => tID.id === (tipoAudioVisualId ? tipoAudioVisualId.tipoId : undefined)
-    );
-
-    const dato: ContenidoAudiovisual | undefined = contenidosAudiovisuales.find(
-        (datoID) => datoID.id === Number(audioVisualId)
-    );
-
-    const generos = dato?.generos.map((id) =>
-        generosContenidoAudiovisual.find((g) => g.id === id)
-    );
+    const { getContenidoById, getTipoById, getGenerosByIds } = useAudiovisual();
+    
+    const dato = getContenidoById(Number(audioVisualId));
+    const tipo = dato ? getTipoById(dato.tipoId) : undefined;
+    const generos = dato ? getGenerosByIds(dato.generos) : [];
 
     const { width: screenWidth } = useWindowDimensions();
     const widthFactor = Platform.OS === 'web' ? 0.4 : 0.9;
@@ -49,7 +35,7 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
                     Generos
                 </TextPressStart2P>
             </View>
-            <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []} />
+            <ListaGeneros generos={generos} />
         </View>
     )
 }

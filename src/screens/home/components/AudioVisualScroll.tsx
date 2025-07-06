@@ -1,24 +1,22 @@
-import { ITipoContenidoAudiovisual, tiposContenidoAudiovisual } from "@/src/data/tiposContenidoAudiovisual";
 import { FlatList, StyleSheet, View, Text} from "react-native";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
 import React, { useState } from "react";
 import { AudioVisualCard } from "./AudioVisualCard";
+import { useAudiovisual } from "@/src/context/AudiovisualContext";
 
 interface AudioVisualScrollProps{
     tipoId: number,
     contenidosFiltrados: IContenidoAudiovisual[];
-    // url: Href
 }
 
 export function AudioVisualScroll({tipoId, contenidosFiltrados}: AudioVisualScrollProps){
-    const tipo: ITipoContenidoAudiovisual | undefined = tiposContenidoAudiovisual.find(
-        (tID) => tID.id === tipoId
-    );
+    const { getTipoById } = useAudiovisual();
+    const tipo = getTipoById(tipoId);
     
     const datos: IContenidoAudiovisual[] = contenidosFiltrados.filter(
-        (datoID) => datoID.tipoId === tipo?.id
+        (datoID) => datoID.tipoId === tipoId
     );
 
     const [maxCardHeight, setMaxCardHeight] = useState(0);

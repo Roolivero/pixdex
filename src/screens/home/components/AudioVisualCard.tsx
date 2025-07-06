@@ -3,15 +3,15 @@ import Imagen from "@/src/components/Imagen";
 import ListaGeneros from "@/src/components/ListaGeneros";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import {
-  ContenidoAudiovisual,
+  IContenidoAudiovisual,
 } from "@/src/data/contenidosAudiovisuales";
-import { generosContenidoAudiovisual, IGeneroContenidoAudiovisual } from "@/src/data/generosContenidoAudiovisual";
 import { useRouter } from "expo-router";
 import React from "react";
 import {Platform, StyleSheet, TouchableOpacity, useWindowDimensions, View, LayoutChangeEvent } from "react-native";
+import { useAudiovisual } from "@/src/context/AudiovisualContext";
 
 interface AudioVisualCardProps {
-  itemCard: ContenidoAudiovisual;
+  itemCard: IContenidoAudiovisual;
   fixedHeight?:number;
   onMeasure?:(height:number)=>void;
 }
@@ -22,6 +22,8 @@ export function AudioVisualCard({ itemCard, fixedHeight, onMeasure }: AudioVisua
   const CARD_WIDTH = screenWidth * widthFactor;
 
   const router = useRouter();
+  const { getGenerosByIds } = useAudiovisual();
+  
   const handlePress = () => {
     router.push({
       pathname: "/detail/[audioVisualId]",
@@ -29,22 +31,21 @@ export function AudioVisualCard({ itemCard, fixedHeight, onMeasure }: AudioVisua
     });
   }
 
-  const generos = itemCard.generos.map((id) =>
-    generosContenidoAudiovisual.find((g) => g.id === id)
-  );
+  const generos = getGenerosByIds(itemCard.generos);
+  
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={handlePress}>
       <View style={[styles.contenedor,{ width: CARD_WIDTH },fixedHeight != null? {minHeight: fixedHeight}: undefined]} onLayout={(e:LayoutChangeEvent) => {
         const{height} = e.nativeEvent.layout;
         if(onMeasure) onMeasure(height);
       }} >
-        {itemCard && <Imagen url={itemCard.imageUrl} />}
+        {itemCard && <Imagen url={itemCard.imageUrl} placeholder="https://place-hold.it/400x600" />}
         <View>
           <TextPressStart2P style={styles.tituloCard}>
             {itemCard.nombre}
           </TextPressStart2P>
         </View>
-        <ListaGeneros generos={generos?.filter((g): g is IGeneroContenidoAudiovisual => g !== undefined) || []} />
+        <ListaGeneros generos={generos} />
       </View>
     </TouchableOpacity>
   );

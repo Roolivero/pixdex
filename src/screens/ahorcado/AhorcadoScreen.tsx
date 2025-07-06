@@ -1,45 +1,26 @@
 import { Colors } from "@/constants/Colors";
-import { Platform, ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
+import { Platform, ScrollView, StyleSheet, View, ActivityIndicator, Text } from "react-native";
 import { useState, useEffect } from "react";
 import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
-import { getContenidosConDemora } from "@/src/services/servicios-demora";
 import AhorcadoHeader from "./components/AhorcadoHeader";
 import AhorcadoGame from "./components/AhorcadoGame";
 import { useRouter } from "expo-router";
+import { useAudiovisual } from "@/src/context/AudiovisualContext";
+import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 
 export default function AhorcadoScreen() {
-    const [contenidos, setContenidos] = useState<IContenidoAudiovisual[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [vidas, setVidas] = useState(5);
     const [score, setScore] = useState(0);
     const [contenidoActual, setContenidoActual] = useState<IContenidoAudiovisual | null>(null);
     const [contenidosUsados, setContenidosUsados] = useState<number[]>([]);
     const router = useRouter();
-
-    useEffect(() => {
-        cargarDatos();
-    }, []);
+    const { contenidos, isLoading, error } = useAudiovisual();
 
     useEffect(() => {
         if (contenidos.length > 0 && !contenidoActual) {
             seleccionarNuevoContenido();
         }
     }, [contenidos, contenidoActual]);
-
-    const cargarDatos = async () => {
-        setIsLoading(true);
-        try {
-            const contenidosData = await getContenidosConDemora();
-            setContenidos(contenidosData);
-        } catch (error) {
-            console.error("Error cargando datos:", error);
-            // Fallback a datos locales si la API falla
-            const { contenidosAudiovisuales } = await import('@/src/data/contenidosAudiovisuales');
-            setContenidos(contenidosAudiovisuales);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const seleccionarNuevoContenido = () => {
         const contenidosDisponibles = contenidos.filter(c => !contenidosUsados.includes(c.id));
@@ -107,6 +88,14 @@ export default function AhorcadoScreen() {
         );
     }
 
+    if (error) {
+        return (
+            <View style={[styles.screenContainer, styles.loadingContainer]}>
+                <TextPressStart2P style={styles.errorText}>Error: {error}</TextPressStart2P>
+            </View>
+        );
+    }
+
     return (
         <ScrollView style={styles.screenContainer}>
             <AhorcadoHeader 
@@ -134,5 +123,11 @@ const styles = StyleSheet.create({
     loadingContainer: {
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    errorText: {
+        color: Colors.purpura,
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 20
     }
 });
