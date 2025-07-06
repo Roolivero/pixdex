@@ -1,9 +1,10 @@
-import { Colors } from "@/constants/Colors";
-import { Platform, ScrollView, StyleSheet, View, ActivityIndicator } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import DetailCard from "./components/DetailCard";
 import DetailHeader from "./components/DetailHeader";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
-import { TextPressStart2P } from "@/src/components/TextPressStart2P";
+import { LoadingContainer } from "@/src/components/LoadingContainer";
+import { ErrorContainer } from "@/src/components/ErrorContainer";
+import { ScreenContainer } from "@/src/components/ScreenContainer";
 
 export interface DetailScreenProps {
     audioVisualId: string
@@ -14,31 +15,29 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
     const contenido = getContenidoById(parseInt(audioVisualId));
 
     if (isLoading) {
-        return (
-            <View style={[styles.contenedorPrincipal, styles.loadingContainer]}>
-                <ActivityIndicator size="large" color={Colors.purpura} />
-            </View>
-        );
+        return <LoadingContainer message="Cargando contenido..." />;
     }
 
     if (error) {
         return (
-            <View style={[styles.contenedorPrincipal, styles.loadingContainer]}>
-                <TextPressStart2P style={styles.errorText}>Error: {error}</TextPressStart2P>
-            </View>
+            <ErrorContainer 
+                message={`Error: ${error}`} 
+                onRetry={() => window.location.reload()}
+            />
         );
     }
 
     if (!contenido) {
         return (
-            <View style={[styles.contenedorPrincipal, styles.loadingContainer]}>
-                <TextPressStart2P style={styles.errorText}>Contenido no encontrado</TextPressStart2P>
-            </View>
+            <ErrorContainer 
+                message="Contenido no encontrado" 
+                showRetryButton={false}
+            />
         );
     }
 
     return (
-        <ScrollView style={styles.contenedorPrincipal}>
+        <ScreenContainer>
             <View style={styles.contenedorHeader}>
                 <DetailHeader/>
             </View>
@@ -51,7 +50,7 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
                     <DetailCard audioVisualId={audioVisualId} />
                 )
             }
-        </ScrollView>
+        </ScreenContainer>
     )
 }
 
@@ -59,24 +58,8 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
 
 // Styles
 const styles = StyleSheet.create({
-
-    contenedorPrincipal: {
-        backgroundColor: Colors.fondo,
-        flex: 1,
-        padding: 20,
-    },
     contenedorHeader: {
         paddingBottom: 20,
         alignItems: "flex-start",
     },
-    loadingContainer: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    errorText: {
-        color: Colors.purpura,
-        fontSize: 16,
-        textAlign: 'center',
-        padding: 20
-    }
 });

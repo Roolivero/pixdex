@@ -7,8 +7,8 @@ import { ROUTES } from "@/src/navigate/routes";
 import { useState } from "react";
 import { ModalFiltros } from "@/src/components/ModalFiltros";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
-import { LoadingScreen } from "@/src/components/LoadingScreen";
-import { ErrorScreen } from "@/src/components/ErrorScreen";
+import { LoadingContainer } from "@/src/components/LoadingContainer";
+import { ErrorContainer } from "@/src/components/ErrorContainer";
 import { useFilters } from "@/src/hooks/useFilters";
 
 export function HomeScreen() {
@@ -39,12 +39,12 @@ export function HomeScreen() {
     };
 
     if (isLoading) {
-        return <LoadingScreen message="Cargando contenidos..." />;
+        return <LoadingContainer message="Cargando contenidos..." />;
     }
 
     if (error) {
         return (
-            <ErrorScreen 
+            <ErrorContainer 
                 message={`Error: ${error}`} 
                 onRetry={() => window.location.reload()}
             />

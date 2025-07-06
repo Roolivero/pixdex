@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet, ScrollView, TouchableOpacity, Text, FlatList } from 'react-native';
+import { Modal, View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { TextPressStart2P } from './TextPressStart2P';
 import { ITipoContenidoAudiovisual } from '@/src/data/tiposContenidoAudiovisual';
 import { IGeneroContenidoAudiovisual } from '@/src/data/generosContenidoAudiovisual';
 import Boton from './Boton';
 import { Mayuscula } from '@/src/tools/mayuscula';
+import { FilterSection } from './filters/FilterSection';
 
 interface ModalFiltrosProps {
     visible: boolean;
@@ -45,10 +46,7 @@ export function ModalFiltros({ visible, onClose, onApplyFilters, tipos, generos 
         setGenerosSeleccionados([]);
     };
 
-    // Para dividir los géneros en dos columnas
-    const generosPorColumna = Math.ceil(generos.length / 2);
-    const generosCol1 = generos.slice(0, generosPorColumna);
-    const generosCol2 = generos.slice(generosPorColumna);
+
 
     return (
         <Modal
@@ -67,66 +65,22 @@ export function ModalFiltros({ visible, onClose, onApplyFilters, tipos, generos 
                     </View>
 
                     <ScrollView style={styles.content} showsVerticalScrollIndicator={true}>
-                        <View style={styles.section}>
-                            <TextPressStart2P style={styles.sectionTitle}>Tipos</TextPressStart2P>
-                            {tipos.length === 0 ? (
-                                <TextPressStart2P style={styles.noDataText}>Cargando tipos...</TextPressStart2P>
-                            ) : (
-                                tipos.map(tipo => (
-                                    <TouchableOpacity
-                                        key={tipo.id}
-                                        style={styles.checkboxRow}
-                                        onPress={() => toggleTipo(tipo.id)}
-                                        activeOpacity={0.7}
-                                    >
-                                        <View style={[styles.checkboxBox, tiposSeleccionados.includes(tipo.id) && styles.checkboxBoxSelected]}>
-                                            {tiposSeleccionados.includes(tipo.id) && <Text style={styles.checkboxTick}>✓</Text>}
-                                        </View>
-                                        <Text style={styles.checkboxTextNormal}>{Mayuscula(tipo.plural)}</Text>
-                                    </TouchableOpacity>
-                                ))
-                            )}
-                        </View>
-
-                        <View style={styles.section}>
-                            <TextPressStart2P style={styles.sectionTitle}>Géneros</TextPressStart2P>
-                            {generos.length === 0 ? (
-                                <TextPressStart2P style={styles.noDataText}>Cargando géneros...</TextPressStart2P>
-                            ) : (
-                                <View style={styles.generosGrid}>
-                                    <View style={styles.generosCol}>
-                                        {generosCol1.map(genero => (
-                                            <TouchableOpacity
-                                                key={genero.id}
-                                                style={styles.checkboxRow}
-                                                onPress={() => toggleGenero(genero.id)}
-                                                activeOpacity={0.7}
-                                            >
-                                                <View style={[styles.checkboxBox, generosSeleccionados.includes(genero.id) && styles.checkboxBoxSelected]}>
-                                                    {generosSeleccionados.includes(genero.id) && <Text style={styles.checkboxTick}>✓</Text>}
-                                                </View>
-                                                <Text style={styles.checkboxTextNormal}>{Mayuscula(genero.nombre)}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-                                    <View style={styles.generosCol}>
-                                        {generosCol2.map(genero => (
-                                            <TouchableOpacity
-                                                key={genero.id}
-                                                style={styles.checkboxRow}
-                                                onPress={() => toggleGenero(genero.id)}
-                                                activeOpacity={0.7}
-                                            >
-                                                <View style={[styles.checkboxBox, generosSeleccionados.includes(genero.id) && styles.checkboxBoxSelected]}>
-                                                    {generosSeleccionados.includes(genero.id) && <Text style={styles.checkboxTick}>✓</Text>}
-                                                </View>
-                                                <Text style={styles.checkboxTextNormal}>{Mayuscula(genero.nombre)}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-                                </View>
-                            )}
-                        </View>
+                        <FilterSection
+                            title="Tipos"
+                            items={tipos.map(tipo => ({ id: tipo.id, label: Mayuscula(tipo.plural) }))}
+                            selectedItems={tiposSeleccionados}
+                            onToggleItem={toggleTipo}
+                            isLoading={tipos.length === 0}
+                        />
+                        
+                        <FilterSection
+                            title="Géneros"
+                            items={generos.map(genero => ({ id: genero.id, label: Mayuscula(genero.nombre) }))}
+                            selectedItems={generosSeleccionados}
+                            onToggleItem={toggleGenero}
+                            isLoading={generos.length === 0}
+                            useGrid={true}
+                        />
                     </ScrollView>
 
                     <View style={styles.buttons}>
@@ -188,60 +142,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.fondo,
         padding: 0,
     },
-    section: {
-        marginBottom: 20,
-    },
-    sectionTitle: {
-        fontSize: 14,
-        color: Colors.purpuraClaro,
-        marginBottom: 10,
-        fontWeight: 'bold',
-    },
-    checkboxRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    checkboxBox: {
-        width: 25,
-        height: 25,
-        borderWidth: 2,
-        borderColor: Colors.purpuraClaro,
-        backgroundColor: Colors.fondo,
-        marginRight: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    checkboxBoxSelected: {
-        borderColor: Colors.purpura,
-        backgroundColor: Colors.purpura,
-    },
-    checkboxTick: {
-        color: '#fff',
-        fontSize: 16,
-        textAlign: 'center',
-        lineHeight: 18,
-        includeFontPadding: false,
-    },
-    checkboxTextNormal: {
-        fontSize: 12,
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    generosGrid: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    generosCol: {
-        flex: 1,
-    },
-    noDataText: {
-        fontSize: 12,
-        color: Colors.purpuraClaro,
-        fontStyle: 'italic',
-        textAlign: 'center',
-        padding: 10,
-    },
+
     buttons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
