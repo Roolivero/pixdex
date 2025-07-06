@@ -15,7 +15,7 @@ export default function DetailHeader(){
 
     return(
         <View style={{ paddingTop }}>
-            <Boton onPress={handlePress} icon="arrow-back" texto="Back" variant="large" />
+            <Boton onPress={handlePress} icon="arrow-back" texto="Back" />
         </View>
         )        
 }

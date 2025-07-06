@@ -134,13 +134,11 @@ export function ModalFiltros({ visible, onClose, onApplyFilters, tipos, generos 
                             onPress={resetFilters} 
                             icon="refresh"
                             texto="RESET" 
-                            variant="small" 
                         />
                         <Boton 
                             onPress={handleApplyFilters} 
                             icon="check"
                             texto="APLICAR" 
-                            variant="small" 
                         />
                     </View>
                 </View>

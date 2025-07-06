@@ -15,7 +15,7 @@ export function HomeHeader({ onOpenFilters }: HomeHeaderProps) {
     return (
         <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-            <Boton onPress={onOpenFilters} icon="settings" texto="FILTRAR" variant="small" />
+            <Boton onPress={onOpenFilters} icon="settings" texto="FILTRAR" fontSize={9} />
         </View>
     );
 }
