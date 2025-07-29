@@ -48,7 +48,7 @@ export default function Boton({
 const styles = StyleSheet.create({
     button: {
         backgroundColor: Colors.purpura,
-        padding: 10,
+        padding: 5,
         borderWidth: 1,
         borderTopColor: Colors.purpuraClaro,
         borderLeftColor: Colors.purpuraClaro,
