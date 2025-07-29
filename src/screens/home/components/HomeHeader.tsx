@@ -6,16 +6,21 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface HomeHeaderProps {
     onOpenFilters: () => void;
+    onToggleAuth: () => void;
+    isLoggedIn: boolean;
 }
 
-export function HomeHeader({ onOpenFilters }: HomeHeaderProps) {
+export function HomeHeader({ onOpenFilters, onToggleAuth, isLoggedIn }: HomeHeaderProps) {
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 20 : 20;
 
     return (
         <View style={[styles.container, { paddingTop }]}>
             <TextPressStart2P style={styles.title}>Pixdex</TextPressStart2P>
-            <Boton onPress={onOpenFilters} icon="settings" texto="FILTRAR" fontSize={12} />
+            <View style={styles.buttonsContainer}>
+                <Boton onPress={onToggleAuth} icon={isLoggedIn ? "logout" : "login"} texto={isLoggedIn ? "CERRAR SESIÓN" : "INICIAR SESIÓN"} fontSize={10} />
+                <Boton onPress={onOpenFilters} icon="settings" texto="FILTRAR" fontSize={10} />
+            </View>
         </View>
     );
 }
@@ -35,9 +40,14 @@ const styles = StyleSheet.create({
         alignItems: "flex-start"
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         color: Colors.purpura, 
         fontWeight: 'bold',
+    },
+    buttonsContainer: {
+        flexDirection: "column",
+        gap: 5,
+        alignItems: "flex-end"
     },
     button: {
         backgroundColor: Colors.purpura,

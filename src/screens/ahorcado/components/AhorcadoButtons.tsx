@@ -25,16 +25,16 @@ export default function AhorcadoButtons({ onAdivinarTitulo, onAdivinarLetra }: A
     };
 
     return (
-        <View style={styles.container}>
+        <View>
             <View style={styles.buttonsContainer}>
                 <Boton
                     onPress={() => setShowModalTitulo(true)}
-                    texto="GUESS TITLE"
+                    texto="ADIVINAR TITULO"
                     fontSize={8}
                 />
                 <Boton
                     onPress={() => setShowModalLetra(true)}
-                    texto="GUESS LETTER"
+                    texto="ADIVINAR LETRA "
                     fontSize={8}
                 />
             </View>
@@ -54,12 +54,9 @@ export default function AhorcadoButtons({ onAdivinarTitulo, onAdivinarLetra }: A
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: 20,
-    },
     buttonsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         gap: 10,
     },
 }); 

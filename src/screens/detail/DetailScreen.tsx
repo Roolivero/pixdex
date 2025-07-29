@@ -1,18 +1,24 @@
 import { Platform, StyleSheet, View } from "react-native";
 import DetailCard from "./components/DetailCard";
-import DetailHeader from "./components/DetailHeader";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
 import { LoadingContainer } from "@/src/components/LoadingContainer";
 import { ErrorContainer } from "@/src/components/ErrorContainer";
 import { ScreenContainer } from "@/src/components/ScreenContainer";
+import { ScreenHeader } from "@/src/components/ScreenHeader";
+import { useRouter } from "expo-router";
 
 export interface DetailScreenProps {
     audioVisualId: string
 }
 
 export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
+    const router = useRouter();
     const { isLoading, error, getContenidoById } = useAudiovisual();
     const contenido = getContenidoById(parseInt(audioVisualId));
+
+    const handleBack = () => {
+        router.back();
+    };
 
     if (isLoading) {
         return <LoadingContainer message="Cargando contenido..." />;
@@ -38,9 +44,7 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
 
     return (
         <ScreenContainer>
-            <View style={styles.contenedorHeader}>
-                <DetailHeader/>
-            </View>
+            <ScreenHeader onBack={handleBack} />
             {
                 Platform.OS === "web" ? (
                     <View style={{ alignSelf: "center" }}>
@@ -56,9 +60,4 @@ export default function DetailScreen({ audioVisualId }: DetailScreenProps) {
 
 
 
-const styles = StyleSheet.create({
-    contenedorHeader: {
-        paddingBottom: 20,
-        alignItems: "flex-start",
-    },
-});
+const styles = StyleSheet.create({});

@@ -4,6 +4,7 @@ import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
 import Imagen from "@/src/components/Imagen";
 import AhorcadoButtons from "./AhorcadoButtons";
 import AhorcadoWordDisplay from "./AhorcadoWordDisplay";
+import { ScreenCard } from "@/src/components/ScreenCard";
 import { useState, useEffect } from "react";
 
 interface AhorcadoGameProps {
@@ -41,11 +42,10 @@ export default function AhorcadoGame({ contenido, onAdivinarTitulo, onAdivinarLe
         onAdivinarLetra(letra);
     };
 
-    const { width: screenWidth } = Platform.OS === 'web' ? { width: 800 } : { width: 400 };
-    const CARD_WIDTH = screenWidth * 0.9;
+
 
     return (
-        <View style={[styles.contenedor, { width: CARD_WIDTH }]}>
+        <ScreenCard>
             <AhorcadoButtons
                 onAdivinarTitulo={onAdivinarTitulo}
                 onAdivinarLetra={handleAdivinarLetra}
@@ -63,19 +63,13 @@ export default function AhorcadoGame({ contenido, onAdivinarTitulo, onAdivinarLe
                 titulo={contenido.nombre}
                 letrasAdivinadas={letrasAdivinadas}
             />
-        </View>
+        </ScreenCard>
     );
 }
 
 const styles = StyleSheet.create({
-    contenedor: {
-        borderWidth: 4,
-        borderColor: Colors.grisOscuro,
-        padding: 20,
-        alignSelf: 'center',
-    },
     imagenContainer: {
-        marginVertical: 20,
+        marginVertical: 15,
         alignItems: 'center',
     },
     debugText: {

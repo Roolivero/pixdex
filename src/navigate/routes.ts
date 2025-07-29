@@ -5,5 +5,6 @@ export const ROUTES: Record<string,Href> = {
     DETAIL: "/detail/",
     AHORCADO: "/ahorcado",
     PIXEL_REVEAL: "/pixel-reveal",
-    GAME_OVER: "/game-over"
+    GAME_OVER: "/game-over",
+    MEJORES_PUNTUACIONES: "/mejores-puntuaciones"
 }

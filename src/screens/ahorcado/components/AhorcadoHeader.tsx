@@ -9,9 +9,10 @@ interface AhorcadoHeaderProps {
     vidas: number;
     score: number;
     onExit: () => void;
+    playerName: string;
 }
 
-export default function AhorcadoHeader({ vidas, score, onExit }: AhorcadoHeaderProps) {
+export default function AhorcadoHeader({ vidas, score, onExit, playerName }: AhorcadoHeaderProps) {
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 5 : 2;
 
@@ -22,7 +23,7 @@ export default function AhorcadoHeader({ vidas, score, onExit }: AhorcadoHeaderP
                 <MaterialIcons
                     key={i}
                     name={i < vidas ? "favorite" : "favorite-border"}
-                    size={24}
+                    size={23}
                     color={Colors.purpura}
                     style={styles.corazon}
                 />
@@ -33,22 +34,19 @@ export default function AhorcadoHeader({ vidas, score, onExit }: AhorcadoHeaderP
 
     return (
         <View style={[styles.header, { paddingTop }]}>
-            {/* Botón EXIT a la izquierda */}
             <View style={styles.leftSection}>
-                <Boton onPress={onExit} icon="exit-to-app" texto="EXIT" fontSize={8} />
+                <Boton onPress={onExit} icon="arrow-back" texto="EXIT" fontSize={10} />
             </View>
 
-            {/* Corazones en el centro */}
             <View style={styles.centerSection}>
                 <View style={styles.corazonesContainer}>
                     {renderCorazones()}
                 </View>
             </View>
 
-            {/* Nombre del jugador y score a la derecha */}
             <View style={styles.rightSection}>
-                <Text style={styles.playerName}>JUGADOR</Text>
-                <Text style={styles.score}>SCORE: {score}</Text>
+                <Text style={styles.playerName}>JUGADOR: {playerName}</Text>
+                <Text style={styles.score}>PUNTUACION: {score}</Text>
             </View>
         </View>
     );
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
     },
     corazonesContainer: {
         flexDirection: 'row',
-        gap: 2,
+        gap: 1,
     },
     corazon: {
         marginHorizontal: 1,

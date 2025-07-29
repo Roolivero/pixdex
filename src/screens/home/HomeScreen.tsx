@@ -7,6 +7,7 @@ import { ROUTES } from "@/src/navigate/routes";
 import { useState } from "react";
 import { ModalFiltros } from "@/src/components/ModalFiltros";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
+import { useUser } from "@/src/context/UserContext";
 import { LoadingContainer } from "@/src/components/LoadingContainer";
 import { ErrorContainer } from "@/src/components/ErrorContainer";
 import { useFilters } from "@/src/hooks/useFilters";
@@ -22,6 +23,8 @@ export function HomeScreen() {
         isLoading, 
         error
     } = useAudiovisual();
+
+    const { isLoggedIn, toggleAuth } = useUser();
 
     const {
         contenidosFiltrados,
@@ -41,6 +44,10 @@ export function HomeScreen() {
         setModalVisible(true);
     };
 
+    const handleToggleAuth = () => {
+        toggleAuth();
+    };
+
     if (isLoading) {
         return <LoadingContainer message="Cargando contenidos..." />;
     }
@@ -56,9 +63,13 @@ export function HomeScreen() {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: Colors.fondo }}>
-            <HomeHeader onOpenFilters={handleOpenFilters} />
+            <HomeHeader 
+                onOpenFilters={handleOpenFilters} 
+                onToggleAuth={handleToggleAuth}
+                isLoggedIn={isLoggedIn}
+            />
             <View style={styles.buttonContainer}>
-                <GameButton titulo="Desafío del Ahorcado" descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" fondo={Colors.purpura} url={ROUTES.AHORCADO}/>
+                <GameButton titulo="Desafío del Ahorcado" descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" fondo={Colors.purpura} url={ROUTES.MEJORES_PUNTUACIONES}/>
                 <GameButton titulo="Pixel Reveal" descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" fondo={Colors.verde} url={ROUTES.PIXEL_REVEAL}/>
             </View>
             <View style={styles.contenedorScroll}>
@@ -89,6 +100,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 10,
+        paddingTop: 20,
         gap: 20
     },
     contenedorScroll: {

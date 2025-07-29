@@ -10,6 +10,7 @@ interface BotonProps {
     fontSize?: number
     showIcon?: boolean
     disabled?: boolean
+    borderColor?: string
 }
 
 export default function Boton({ 
@@ -18,7 +19,8 @@ export default function Boton({
     texto, 
     fontSize = 12,
     showIcon = true,
-    disabled = false
+    disabled = false,
+    borderColor
 }: BotonProps) {
     const shouldShowIcon = showIcon && icon;
     
@@ -26,7 +28,13 @@ export default function Boton({
         <TouchableOpacity 
             style={[
                 styles.button,
-                disabled && styles.buttonDisabled
+                disabled && styles.buttonDisabled,
+                borderColor && {
+                    borderTopColor: borderColor,
+                    borderLeftColor: borderColor,
+                    borderBottomColor: borderColor,
+                    borderRightColor: borderColor,
+                }
             ]} 
             activeOpacity={0.5}
             onPress={onPress}

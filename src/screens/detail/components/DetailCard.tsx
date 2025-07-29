@@ -6,6 +6,7 @@ import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { DetailScreenProps } from "../DetailScreen";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
+import { ScreenCard } from "@/src/components/ScreenCard";
 
 export default function DetailCard({ audioVisualId }: DetailScreenProps) {
     const { getContenidoById, getTipoById, getGenerosByIds } = useAudiovisual();
@@ -19,23 +20,25 @@ export default function DetailCard({ audioVisualId }: DetailScreenProps) {
     const CARD_WIDTH = screenWidth * widthFactor;
 
     return (
-        <View style={[styles.contenedor, { width: CARD_WIDTH }]}>
-            {dato && <Imagen url={dato.imageUrl} placeholder={dato.nombre} />}
-            <TextPressStart2P style={styles.tituloCard}>
-                {dato?.nombre}
-            </TextPressStart2P>
-            <View style={styles.generosContenedor}>
-                {tipo && <Etiqueta texto={tipo.singular} />}
-            </View>
-            <View style={styles.contenedorDescripcion} >
-                <Text style={styles.generoText} numberOfLines={4}>{dato?.descripcion}</Text>
-            </View>
-            <View style={styles.contenedorGeneroEtiqueta}>
-                <TextPressStart2P style={styles.etiquetaGenero}>
-                    Generos
+        <View style={{ width: CARD_WIDTH }}>
+            <ScreenCard>
+                {dato && <Imagen url={dato.imageUrl} placeholder={dato.nombre} />}
+                <TextPressStart2P style={styles.tituloCard}>
+                    {dato?.nombre}
                 </TextPressStart2P>
-            </View>
-            <ListaGeneros generos={generos} />
+                <View style={styles.generosContenedor}>
+                    {tipo && <Etiqueta texto={tipo.singular} />}
+                </View>
+                <View style={styles.contenedorDescripcion} >
+                    <Text style={styles.generoText} numberOfLines={4}>{dato?.descripcion}</Text>
+                </View>
+                <View style={styles.contenedorGeneroEtiqueta}>
+                    <TextPressStart2P style={styles.etiquetaGenero}>
+                        Generos
+                    </TextPressStart2P>
+                </View>
+                <ListaGeneros generos={generos} />
+            </ScreenCard>
         </View>
     )
 }
@@ -67,12 +70,7 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.purpuraOscuro,
         borderRightColor: Colors.purpuraOscuro,
     },
-    contenedor: {
-        borderWidth: 4,
-        borderColor: Colors.grisOscuro,
-        flex: 1,
-        padding: 20
-    },
+
     tituloCard: {
         padding: 10,
         color: Colors.purpura,

@@ -10,8 +10,8 @@ export default function GameOverScreen() {
     const { top } = useSafeAreaInsets();
     const paddingTop = Platform.OS === "ios" ? top + 5 : 2;
 
-    const handleVolverAlHome = () => {
-        router.push("/");
+    const handleVolverAPuntuaciones = () => {
+        router.push("/mejores-puntuaciones");
     };
 
     return (
@@ -32,9 +32,8 @@ export default function GameOverScreen() {
 
             <View style={styles.buttonContainer}>
                 <Boton
-                    onPress={handleVolverAlHome}
-                    icon="home"
-                    texto="VOLVER AL HOME"
+                    onPress={handleVolverAPuntuaciones}
+                    texto="VOLVER"
                 />
             </View>
         </View>
@@ -74,5 +73,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: '100%',
         maxWidth: 300,
+        alignContent: 'center',
+        paddingHorizontal: 99
     },
 }); 
