@@ -25,8 +25,8 @@ cp .env.example .env
 
 2. Edita el archivo `.env` y reemplaza las credenciales:
 ```env
-SUPABASE_URL=tu_supabase_project_url_aqui
-SUPABASE_ANON_KEY=tu_supabase_anon_key_aqui
+EXPO_PUBLIC_SUPABASE_URL=tu_supabase_project_url_aqui
+EXPO_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key_aqui
 ```
 
 #### 2.3 Configurar base de datos

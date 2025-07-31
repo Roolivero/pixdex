@@ -43,12 +43,14 @@ export function UserProvider({ children }: UserProviderProps) {
         try {
             const { user, error } = await supabaseAuth.getCurrentUser();
             if (error) {
-                console.error("Error verificando usuario:", error);
+                console.log("No hay sesión activa o error de autenticación:", error);
+                setUser(null);
             } else {
                 setUser(user);
             }
         } catch (error) {
-            console.error("Error en checkUser:", error);
+            console.log("Error en checkUser:", error);
+            setUser(null);
         } finally {
             setIsLoading(false);
         }
