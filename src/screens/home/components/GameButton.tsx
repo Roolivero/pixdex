@@ -1,19 +1,37 @@
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
-import { TouchableOpacity, Text, StyleSheet, View, Platform } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, Platform, Alert } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Href, useRouter } from "expo-router";
+import { useUser } from "@/src/context/UserContext";
 
 interface GameButtonProps {
     titulo: string,
     descripcion: string,
     fondo: string,
-    url: Href
+    url: Href,
+    onLoginRequired?: () => void
 }
 
-export function GameButton({ titulo, descripcion, fondo, url }: GameButtonProps) {
+export function GameButton({ titulo, descripcion, fondo, url, onLoginRequired }: GameButtonProps) {
     const router = useRouter();
+    const { isLoggedIn } = useUser();
+    
     const handlePress = () => {
-        router.push(url)
+        if (!isLoggedIn) {
+            Alert.alert(
+                "Acceso Denegado",
+                "Debes iniciar sesión para acceder a los juegos.",
+                [
+                    { text: "Cancelar", style: "cancel" },
+                    { text: "Iniciar Sesión", onPress: () => {
+                        onLoginRequired?.();
+                    }}
+                ]
+            );
+            return;
+        }
+        
+        router.push(url);
     }
 
     return (

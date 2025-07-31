@@ -1,8 +1,11 @@
 import { View, StyleSheet, Text } from "react-native";
+import { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import Boton from "@/src/components/Boton";
 import { ScreenCard } from "@/src/components/ScreenCard";
+import { TopPuntuacion } from "@/src/lib/supabase";
+import { supabasePuntuaciones } from "@/src/services/supabasePuntuaciones";
 
 interface Puntuacion {
     id: string;
@@ -23,10 +26,40 @@ interface MejoresPuntuacionesContentProps {
 }
 
 export function PuntuacionesContent({ onIniciarJuego }: MejoresPuntuacionesContentProps) {
-    const renderPuntuacion = (puntuacion: Puntuacion, index: number) => (
+    const [puntuaciones, setPuntuaciones] = useState<TopPuntuacion[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        cargarPuntuaciones();
+    }, []);
+
+    const cargarPuntuaciones = async () => {
+        try {
+            setIsLoading(true);
+            setError(null);
+            
+            const data = await supabasePuntuaciones.getTopPuntuaciones();
+            setPuntuaciones(data);
+        } catch (error) {
+            console.error('Error cargando puntuaciones:', error);
+            setError('Error al cargar puntuaciones');
+            setPuntuaciones(puntuacionesMock.map((p, index) => ({
+                id: p.id,
+                player_name: p.nombre,
+                score: p.puntuacion,
+                created_at: new Date().toISOString(),
+                rank_position: index + 1
+            })));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const renderPuntuacion = (puntuacion: TopPuntuacion, index: number) => (
         <View key={puntuacion.id} style={styles.puntuacionItem}>
-            <Text style={styles.nombre}>{puntuacion.nombre}</Text>
-            <Text style={styles.puntuacion}>{puntuacion.puntuacion}</Text>
+            <Text style={styles.nombre}>{puntuacion.player_name}</Text>
+            <Text style={styles.puntuacion}>{puntuacion.score}</Text>
         </View>
     );
 
@@ -50,7 +83,15 @@ export function PuntuacionesContent({ onIniciarJuego }: MejoresPuntuacionesConte
             </TextPressStart2P>
 
             <View style={styles.puntuacionesContainer}>
-                {puntuacionesMock.map((puntuacion, index) => renderPuntuacion(puntuacion, index))}
+                {isLoading ? (
+                    <Text style={styles.loadingText}>Cargando puntuaciones...</Text>
+                ) : error ? (
+                    <Text style={styles.errorText}>{error}</Text>
+                ) : puntuaciones.length === 0 ? (
+                    <Text style={styles.emptyText}>No hay puntuaciones disponibles</Text>
+                ) : (
+                    puntuaciones.map((puntuacion, index) => renderPuntuacion(puntuacion, index))
+                )}
             </View>
         </ScreenCard>
     );
@@ -93,5 +134,23 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.verde,
         fontWeight: "bold",
+    },
+    loadingText: {
+        fontSize: 14,
+        color: Colors.verde,
+        textAlign: "center",
+        padding: 10,
+    },
+    errorText: {
+        fontSize: 14,
+        color: "#ff6b6b",
+        textAlign: "center",
+        padding: 10,
+    },
+    emptyText: {
+        fontSize: 14,
+        color: "#ccc",
+        textAlign: "center",
+        padding: 10,
     },
 }); 

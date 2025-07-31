@@ -44,17 +44,12 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
     setIsUsingLocalData(false);
     
     try {
-      console.log("🔄 Verificando disponibilidad de la API...");
-      
       const apiAvailable = await isApiAvailable();
       
       if (!apiAvailable) {
-        console.log("API no disponible, usando datos locales...");
         await loadLocalData();
         return;
       }
-      
-      console.log(" API disponible, cargando datos...");
       
       const [contenidosData, tiposData, generosData] = await Promise.all([
         getContenidosConDemora(),
@@ -62,11 +57,7 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
         getGenerosConDemora()
       ]);
       
-      console.log("Datos cargados exitosamente desde la API:", {
-        contenidos: contenidosData.length,
-        tipos: tiposData.length,
-        generos: generosData.length
-      });
+
       
       setContenidos(contenidosData);
       setTipos(tiposData);
@@ -82,8 +73,6 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
 
   const loadLocalData = async () => {
     try {
-      console.log("Cargando datos locales...");
-      
       const { contenidosAudiovisuales } = await import('@/src/data/contenidosAudiovisuales');
       const { tiposContenidoAudiovisual } = await import('@/src/data/tiposContenidoAudiovisual');
       const { generosContenidoAudiovisual } = await import('@/src/data/generosContenidoAudiovisual');
@@ -92,8 +81,6 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
       setTipos(tiposContenidoAudiovisual);
       setGeneros(generosContenidoAudiovisual);
       setIsUsingLocalData(true);
-      
-      console.log("Datos locales cargados exitosamente");
     } catch (fallbackError) {
       console.error("Error cargando datos locales:", fallbackError);
       setError("No se pudieron cargar los datos ni desde la API ni localmente");

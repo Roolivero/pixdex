@@ -6,6 +6,7 @@ import { AudioVisualScroll } from "./components/AudioVisualScroll";
 import { ROUTES } from "@/src/navigate/routes";
 import { useState } from "react";
 import { ModalFiltros } from "@/src/components/ModalFiltros";
+import { LoginModal } from "@/src/components/auth/LoginModal";
 import { useAudiovisual } from "@/src/context/AudiovisualContext";
 import { useUser } from "@/src/context/UserContext";
 import { LoadingContainer } from "@/src/components/LoadingContainer";
@@ -15,6 +16,7 @@ import { useFilters } from "@/src/hooks/useFilters";
 
 export function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false);
+    const [loginModalVisible, setLoginModalVisible] = useState(false);
     
     const { 
         contenidos, 
@@ -24,7 +26,7 @@ export function HomeScreen() {
         error
     } = useAudiovisual();
 
-    const { isLoggedIn, toggleAuth } = useUser();
+    const { isLoggedIn, logout } = useUser();
 
     const {
         contenidosFiltrados,
@@ -36,16 +38,15 @@ export function HomeScreen() {
     } = useFilters();
 
     const handleOpenFilters = () => {
-        console.log("Abriendo modal con datos:", {
-            tipos: tipos.length,
-            generos: generos.length,
-            contenidos: contenidos.length
-        });
         setModalVisible(true);
     };
 
     const handleToggleAuth = () => {
-        toggleAuth();
+        if (isLoggedIn) {
+            logout();
+        } else {
+            setLoginModalVisible(true);
+        }
     };
 
     if (isLoading) {
@@ -69,8 +70,20 @@ export function HomeScreen() {
                 isLoggedIn={isLoggedIn}
             />
             <View style={styles.buttonContainer}>
-                <GameButton titulo="Desafío del Ahorcado" descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" fondo={Colors.purpura} url={ROUTES.MEJORES_PUNTUACIONES}/>
-                <GameButton titulo="Pixel Reveal" descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" fondo={Colors.verde} url={ROUTES.PIXEL_REVEAL}/>
+                <GameButton 
+                    titulo="Desafío del Ahorcado" 
+                    descripcion="Adivina los títulos letra por letra. ¿Cuántos puedes identificar?" 
+                    fondo={Colors.purpura} 
+                    url={ROUTES.MEJORES_PUNTUACIONES}
+                    onLoginRequired={() => setLoginModalVisible(true)}
+                />
+                <GameButton 
+                    titulo="Pixel Reveal" 
+                    descripcion="Identifica títulos desde imágenes pixeladas. ¡Pon a prueba tu memoria visual!" 
+                    fondo={Colors.verde} 
+                    url={ROUTES.PIXEL_REVEAL}
+                    onLoginRequired={() => setLoginModalVisible(true)}
+                />
             </View>
             <View style={styles.contenedorScroll}>
                 {tiposParaMostrar.map(tipo => (
@@ -90,6 +103,11 @@ export function HomeScreen() {
                 generos={generos}
                 tiposActuales={tiposSeleccionados}
                 generosActuales={generosSeleccionados}
+            />
+
+            <LoginModal
+                visible={loginModalVisible}
+                onClose={() => setLoginModalVisible(false)}
             />
         </ScrollView>
     );

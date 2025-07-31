@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { IContenidoAudiovisual } from "@/src/data/contenidosAudiovisuales";
+import { useUser } from "@/src/context/UserContext";
+import { supabasePuntuaciones } from "@/src/services/supabasePuntuaciones";
 
 interface UseAhorcadoGameProps {
     contenidos: IContenidoAudiovisual[];
@@ -10,6 +12,10 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
     const [score, setScore] = useState(0);
     const [contenidoActual, setContenidoActual] = useState<IContenidoAudiovisual | null>(null);
     const [contenidosUsados, setContenidosUsados] = useState<number[]>([]);
+    const [isSavingScore, setIsSavingScore] = useState(false);
+    const [hasGameEnded, setHasGameEnded] = useState(false);
+    
+    const { user } = useUser();
 
     const seleccionarNuevoContenido = () => {
         const contenidosDisponibles = contenidos.filter(c => !contenidosUsados.includes(c.id));
@@ -48,12 +54,35 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
         }
     };
 
+    const saveScore = async () => {
+        if (!user || score === 0) return;
+        
+        setIsSavingScore(true);
+        try {
+            const playerName = user.user_metadata?.username || user.email || 'Jugador';
+            
+            await supabasePuntuaciones.upsertPuntuacion(user.id, playerName, score);
+        } catch (error) {
+            console.error('Error guardando puntuación:', error);
+        } finally {
+            setIsSavingScore(false);
+        }
+    };
+
     const resetGame = () => {
         setVidas(5);
         setScore(0);
         setContenidosUsados([]);
         setContenidoActual(null);
+        setHasGameEnded(false);
     };
+
+    useEffect(() => {
+        if (vidas <= 0 && score > 0 && user && !hasGameEnded) {
+            setHasGameEnded(true);
+            saveScore();
+        }
+    }, [vidas, score, user, hasGameEnded]);
 
     useEffect(() => {
         if (contenidos.length > 0 && !contenidoActual) {
@@ -68,6 +97,7 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
         handleAdivinarTitulo,
         handleAdivinarLetra,
         resetGame,
-        isGameOver: vidas <= 0
+        isGameOver: vidas <= 0,
+        isSavingScore
     };
 } 

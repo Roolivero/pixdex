@@ -56,7 +56,7 @@ export default function AhorcadoScreen() {
                 vidas={vidas}
                 score={score}
                 onExit={handleExit}
-                playerName={user?.name || "Jugador"}
+                playerName={user?.user_metadata?.username || user?.email || "Jugador"}
             />
             {contenidoActual && (
                 <AhorcadoGame

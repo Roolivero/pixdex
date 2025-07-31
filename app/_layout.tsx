@@ -15,7 +15,7 @@ export default function RootLayout() {
                         headerTitleAlign: "center",
                         }}
                     >
-                        <Stack.Screen name="detalle/[audiovisual_id]" options={{ headerShown: true }} />
+                        <Stack.Screen name="detail/[audioVisualId]" options={{ headerShown: false }} />
                     </Stack>
                 </View>
             </AudiovisualProvider>
