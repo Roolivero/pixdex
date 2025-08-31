@@ -1,11 +1,9 @@
 import { View, StyleSheet, Text } from "react-native";
-import { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { TextPressStart2P } from "@/src/components/TextPressStart2P";
 import Boton from "@/src/components/Boton";
 import { ScreenCard } from "@/src/components/ScreenCard";
-import { TopPuntuacion } from "@/src/lib/supabase";
-import { supabasePuntuaciones } from "@/src/services/supabasePuntuaciones";
+import { useRealtimePuntuaciones } from "@/src/hooks/useRealtimePuntuaciones";
 
 interface Puntuacion {
     id: string;
@@ -26,37 +24,20 @@ interface MejoresPuntuacionesContentProps {
 }
 
 export function PuntuacionesContent({ onIniciarJuego }: MejoresPuntuacionesContentProps) {
-    const [puntuaciones, setPuntuaciones] = useState<TopPuntuacion[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { puntuaciones, isLoading, error, isRealtimeConnected } = useRealtimePuntuaciones();
 
-    useEffect(() => {
-        cargarPuntuaciones();
-    }, []);
+    // Fallback a datos mock si hay error
+    const puntuacionesAMostrar = error && puntuaciones.length === 0 
+        ? puntuacionesMock.map((p, index) => ({
+            id: p.id,
+            player_name: p.nombre,
+            score: p.puntuacion,
+            created_at: new Date().toISOString(),
+            rank_position: index + 1
+        }))
+        : puntuaciones;
 
-    const cargarPuntuaciones = async () => {
-        try {
-            setIsLoading(true);
-            setError(null);
-            
-            const data = await supabasePuntuaciones.getTopPuntuaciones();
-            setPuntuaciones(data);
-        } catch (error) {
-            console.error('Error cargando puntuaciones:', error);
-            setError('Error al cargar puntuaciones');
-            setPuntuaciones(puntuacionesMock.map((p, index) => ({
-                id: p.id,
-                player_name: p.nombre,
-                score: p.puntuacion,
-                created_at: new Date().toISOString(),
-                rank_position: index + 1
-            })));
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const renderPuntuacion = (puntuacion: TopPuntuacion, index: number) => (
+    const renderPuntuacion = (puntuacion: any, index: number) => (
         <View key={puntuacion.id} style={styles.puntuacionItem}>
             <Text style={styles.nombre}>{puntuacion.player_name}</Text>
             <Text style={styles.puntuacion}>{puntuacion.score}</Text>
@@ -78,19 +59,26 @@ export function PuntuacionesContent({ onIniciarJuego }: MejoresPuntuacionesConte
                 />
             </View>
 
-            <TextPressStart2P style={styles.subtitulo}>
-                Mejores jugadores
-            </TextPressStart2P>
+            <View style={styles.subtituloContainer}>
+                <TextPressStart2P style={styles.subtitulo}>
+                    Mejores jugadores
+                </TextPressStart2P>
+                {isRealtimeConnected && (
+                    <View style={styles.realtimeIndicator}>
+                        <Text style={styles.realtimeText}>●</Text>
+                    </View>
+                )}
+            </View>
 
             <View style={styles.puntuacionesContainer}>
                 {isLoading ? (
                     <Text style={styles.loadingText}>Cargando puntuaciones...</Text>
                 ) : error ? (
                     <Text style={styles.errorText}>{error}</Text>
-                ) : puntuaciones.length === 0 ? (
+                ) : puntuacionesAMostrar.length === 0 ? (
                     <Text style={styles.emptyText}>No hay puntuaciones disponibles</Text>
                 ) : (
-                    puntuaciones.map((puntuacion, index) => renderPuntuacion(puntuacion, index))
+                    puntuacionesAMostrar.map((puntuacion, index) => renderPuntuacion(puntuacion, index))
                 )}
             </View>
         </ScreenCard>
@@ -108,11 +96,24 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginVertical: 20,
     },
+    subtituloContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10,
+    },
     subtitulo: {
         fontSize: 16,
         color: Colors.verde,
-        padding: 10,
         textAlign: "center",
+    },
+    realtimeIndicator: {
+        marginLeft: 8,
+    },
+    realtimeText: {
+        fontSize: 12,
+        color: Colors.verde,
+        fontWeight: "bold",
     },
     puntuacionesContainer: {
         backgroundColor: Colors.grisOscuro,

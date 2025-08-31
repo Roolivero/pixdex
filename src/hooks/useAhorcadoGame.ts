@@ -56,18 +56,20 @@ export function useAhorcadoGame({ contenidos }: UseAhorcadoGameProps) {
 
     const saveScore = async () => {
         if (!user || score === 0) {
-            console.log('No se puede guardar puntuación: usuario no autenticado o score 0');
+            console.log('❌ No se puede guardar puntuación: usuario no autenticado o score 0');
             return;
         }
+        
+        console.log('💾 Intentando guardar puntuación:', { userId: user.id, score, playerName: user.user_metadata?.username || user.email });
         
         setIsSavingScore(true);
         try {
             const playerName = user.user_metadata?.username || user.email || 'Jugador';
             
-            await supabasePuntuaciones.upsertPuntuacion(user.id, playerName, score);
-            console.log('Puntuación guardada exitosamente');
+            const result = await supabasePuntuaciones.upsertPuntuacion(user.id, playerName, score);
+            console.log('✅ Puntuación guardada exitosamente, resultado:', result);
         } catch (error) {
-            console.error('Error guardando puntuación:', error);
+            console.error('❌ Error guardando puntuación:', error);
         } finally {
             setIsSavingScore(false);
         }

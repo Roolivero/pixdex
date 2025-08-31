@@ -30,6 +30,8 @@ export const supabasePuntuaciones = {
 
   // Guardar/actualizar puntuación
   async upsertPuntuacion(userId: string, playerName: string, score: number): Promise<boolean> {
+    console.log('🔄 Llamando a upsertPuntuacion:', { userId, playerName, score });
+    
     try {
       const { data, error } = await supabase
         .rpc('upsert_puntuacion_ahorcado', {
@@ -39,12 +41,14 @@ export const supabasePuntuaciones = {
         });
       
       if (error) {
-        console.log('Error guardando puntuación:', error);
+        console.log('❌ Error guardando puntuación:', error);
         return false;
       }
+      
+      console.log('✅ Resultado de upsertPuntuacion:', data);
       return data;
     } catch (error) {
-      console.log('Error en upsertPuntuacion:', error);
+      console.log('❌ Error en upsertPuntuacion:', error);
       return false;
     }
   },

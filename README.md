@@ -32,6 +32,7 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key_aqui
 #### 2.3 Configurar base de datos
 Ejecuta el siguiente SQL en el editor SQL de Supabase:
 
+
 ```sql
 -- =====================================================
 -- CONFIGURACIÓN DE TABLAS PARA PIXDEX - AHORCADO
@@ -211,6 +212,27 @@ SELECT
 FROM pg_tables 
 WHERE tablename = 'puntuaciones_ahorcado';
 ```
+
+#### 2.4 Configurar Realtime
+Para habilitar actualizaciones en tiempo real de las puntuaciones:
+
+1. Ve a **Database** → **Replication** → **Publications**
+2. Selecciona la publicación `supabase_realtime`
+3. Agrega la tabla `public.puntuaciones_ahorcado` a la publicación
+4. Verifica que **Realtime** esté habilitado en la configuración del proyecto
+
+**Nota**: Sin esta configuración, las puntuaciones se actualizarán solo al recargar la pantalla.
+
+#### 2.5 Configuración Multiplataforma
+La aplicación está configurada para funcionar tanto en **web** como en **móvil**:
+
+- **Web**: Usa `localStorage` para persistencia de sesión
+- **Móvil**: Usa `expo-secure-store` para almacenamiento seguro
+- **Realtime**: Funciona en ambas plataformas con configuración optimizada
+
+**Indicadores visuales:**
+- Punto verde (●) en la pantalla de puntuaciones = Realtime conectado
+- Sin punto = Realtime desconectado o no configurado
 
 ### 3. Ejecutar la aplicación
 ```bash

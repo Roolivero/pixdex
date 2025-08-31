@@ -1,12 +1,69 @@
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
-const expoSecureStoreAdapter = {
-  getItem: (key: string) => SecureStore.getItemAsync(key),
-  setItem: (key: string, value: string) => SecureStore.setItemAsync(key, value),
-  removeItem: (key: string) => SecureStore.deleteItemAsync(key),
+// Adaptador que funciona tanto en web como en móvil
+const createStorageAdapter = () => {
+  if (Platform.OS === 'web') {
+    // En web, usar localStorage
+    return {
+      getItem: async (key: string) => {
+        try {
+          return localStorage.getItem(key);
+        } catch (error) {
+          console.warn('Error getting item from localStorage:', error);
+          return null;
+        }
+      },
+      setItem: async (key: string, value: string) => {
+        try {
+          localStorage.setItem(key, value);
+        } catch (error) {
+          console.warn('Error setting item in localStorage:', error);
+        }
+      },
+      removeItem: async (key: string) => {
+        try {
+          localStorage.removeItem(key);
+        } catch (error) {
+          console.warn('Error removing item from localStorage:', error);
+        }
+      },
+    };
+  } else {
+    // En móvil, usar expo-secure-store
+    return {
+      getItem: async (key: string) => {
+        try {
+          return await SecureStore.getItemAsync(key);
+        } catch (error) {
+          console.warn('Error getting item from SecureStore:', error);
+          return null;
+        }
+      },
+      setItem: async (key: string, value: string) => {
+        try {
+          await SecureStore.setItemAsync(key, value);
+        } catch (error) {
+          console.warn('Error setting item in SecureStore:', error);
+        }
+      },
+      removeItem: async (key: string) => {
+        try {
+          await SecureStore.deleteItemAsync(key);
+        } catch (error) {
+          console.warn('Error removing item from SecureStore:', error);
+        }
+      },
+    };
+  }
 };
+
+const storageAdapter = createStorageAdapter();
+
+console.log('🌐 Platform:', Platform.OS);
+console.log('🔧 Storage adapter:', Platform.OS === 'web' ? 'localStorage' : 'expo-secure-store');
 
 // Validar que las variables de entorno estén definidas
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -21,10 +78,15 @@ if (!supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: expoSecureStoreAdapter,
+    storage: storageAdapter,
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false,
+    detectSessionInUrl: Platform.OS === 'web', // Habilitar solo en web
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10, // Limitar eventos por segundo en web
+    },
   },
 });
 
