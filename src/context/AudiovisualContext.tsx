@@ -127,7 +127,7 @@ export function AudiovisualProvider({ children }: AudiovisualProviderProps) {
 
     if (generoIds.length > 0) {
       filtrados = filtrados.filter(contenido => 
-        generoIds.every(generoId => contenido.generos.includes(generoId))
+        generoIds.some(generoId => contenido.generos.includes(generoId))
       );
     }
 
